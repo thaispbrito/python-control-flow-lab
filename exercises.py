@@ -80,7 +80,7 @@ def check_voting_eligibility():
         age = int(input("Please enter your age: "))
 
         if age < 0:                        
-            print("Invalid input. Age cannot be negative.")
+            print("Invalid input. Age can't be negative.")
         elif age >= VOTING_AGE:
             print("You are eligible to vote!")
         else:
@@ -154,13 +154,13 @@ calculate_dog_years()
 
 def weather_advice():
     # Your control flow logic goes here
-    cold_input = input("Is it cold? Answer yes or no: ").lower()
+    cold_input = input("Is it cold? Answer yes/no: ").lower()
     if cold_input not in ("yes", "no"):
         print("Invalid input. Try again!")
         return
     is_cold = cold_input == "yes"
 
-    raining_input = input("Is it raining? Answer yes or no: ").lower()
+    raining_input = input("Is it raining? Answer yes/no: ").lower()
     if raining_input not in ("yes", "no"):
         print("Invalid input. Try again!")
         return
@@ -208,6 +208,25 @@ def determine_season():
         if day < 1 or day > 31:
             print("Invalid day of the month. You should enter an integer between 1 and 31")
             return
+    
+        # Add extra validation for months and days
+
+        valid_months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+        if month not in valid_months:
+            print("Invalid month. Please enter a month between Jan and Dec.")
+            return
+
+        months_30_days = ["Apr", "Jun", "Sep", "Nov"]
+       
+        if month in months_30_days and day > 30:
+            print(f"{month} only has 30 days.")
+            return   
+        # Not taking in consideration leap years to keep it simple
+        elif month == "Feb" and day > 28:
+            print("February has only 28 days (not considering a leap year).")
+            return
 
         if month in ("Jan", "Feb"):
             season = "Winter"
@@ -222,23 +241,21 @@ def determine_season():
             season = "Fall"
         elif month == "Dec":
             season = "Winter"
-        elif month == "Mar" and day <= 19:
+        elif month == "Mar" and day < 20:
             season = "Winter"
         elif month == "Mar":
             season = "Spring"
-        elif month == "Jun" and day <= 20:
+        elif month == "Jun" and day < 21:
             season = "Spring"
         elif month == "Jun":
             season = "Summer"
-        elif month == "Sep" and day <= 21:
+        elif month == "Sep" and day < 22:
             season = "Summer"
         elif month == "Sep":
             season = "Fall"
-        else: 
-            print("Invalid month.")
-            return 
         
         print(f"{month} {day} is in {season}.")
+
     except ValueError:
         print("Invalid input. Please enter a valid month (Jan - Dec) and day (1 - 31).")   
 
@@ -278,15 +295,17 @@ def guess_number():
 
         try:
             guess = int(input("Guess a number between 1 and 100: "))
+            if guess < 1 or guess > 100:
+                print("This number is not between 1 and 100. Try it again!")
+                continue  # skip this iteration and let the user try again
         except ValueError:
             print("Invalid input. Please enter an integer.")
-            continue  # skip this iteration and let the user try again
+            continue  
 
         if guess == TARGET:
             print("Congratulations, you guessed correctly!")
             right_guess = True
             break
-
         elif guess < TARGET:
             print("Guess is too low.")
         else:
